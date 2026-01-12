@@ -45,13 +45,22 @@ jobs:
         run: bandit -r api -lll
 
       ############################################
-      # 3. Build Docker Image
+      # 3. Dependency Security Scan – Safety
+      ############################################
+      - name: Install Safety
+        run: pip install safety
+
+      - name: Dependency vulnerability scan
+        run: safety check -r requirements.txt
+
+      ############################################
+      # 4. Build Docker Image
       ############################################
       - name: Build Docker image
         run: docker build -t devsecops-api:latest .
 
       ############################################
-      # 4. Container Security Scan – Trivy
+      # 5. Container Security Scan – Trivy
       ############################################
       - name: Trivy Image Scan
         uses: aquasecurity/trivy-action@0.24.0
